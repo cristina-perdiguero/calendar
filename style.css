@@ -1,0 +1,15 @@
+*{
+ box-sizing: border-box;
+}
+body{
+    margin: 0;
+}
+.yearTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button{
+    background-color: transparent;
+    border: none;
+}
