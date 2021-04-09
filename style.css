@@ -1,14 +1,15 @@
 :root{
-    --back-color: #5e6f7f; 
-    --principal-color: #f89595; 
+    --back-color:#131223; 
+    --back-color-month:#222230; 
+    --back-color-title:#363643; 
+    --principal-color: #ce4f57; 
 }
-
-
 *{
  box-sizing: border-box;
 }
 body{
     margin: 0;
+    /*background: linear-gradient(180deg, var(--back-color-dark),  var(--back-color), var( --back-color-dark)  );*/
     background-color: var(--back-color);
     color: white;
     text-align: center;
@@ -40,15 +41,20 @@ button i {
     grid-template-columns: repeat(7, 1fr);
     column-gap: 5px;
     row-gap: 5px;
-    background-color: var(--principal-color);
+    background-color: var(--back-color-month);
     border-radius: 5px;
-    box-shadow: 0px 0px 10px #3d3c3c;
 }
 .monthTitle{
+    border-radius: 5px;
+    padding: 10px;
     text-align: center;
     grid-column-start: 1;
     grid-column-end: 8;
     font-weight: bolder;
     letter-spacing: 2px;
     text-transform: uppercase;
+    background-color: var(--back-color-title);
+}
+.weekDay{
+    color: var(--principal-color);
 }
