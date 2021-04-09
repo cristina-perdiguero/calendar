@@ -1,10 +1,21 @@
+:root{
+    --back-color: #5e6f7f; 
+    --principal-color: #f89595; 
+}
+
+
 *{
  box-sizing: border-box;
 }
 body{
     margin: 0;
+    background-color: var(--back-color);
+    color: white;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
 }
 .yearTitle{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,4 +23,32 @@ body{
 button{
     background-color: transparent;
     border: none;
+}
+button i {
+    color: white;
+}
+.calendarContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.month{
+    margin: 20px;
+    padding: 10px;
+    width: 250px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    column-gap: 5px;
+    row-gap: 5px;
+    background-color: var(--principal-color);
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #3d3c3c;
+}
+.monthTitle{
+    text-align: center;
+    grid-column-start: 1;
+    grid-column-end: 8;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
