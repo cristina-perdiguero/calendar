@@ -9,38 +9,63 @@ const monthList       = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
 const month31Days     = ["Enero", "Marzo", "Mayo", "Julio", "Agosto", "Octubre", "Diciembre" ]; 
 const month30Days     = ["Abril", "Junio", "Septiembre", "Noviembre"]; 
 const week            = ["Lun", "Mar", "Mier", "Jue" , "Vie", "Sab", "Dom"]; 
-let   elementCalendar = ''; 
 
-//elemento año
-let elementYear = function(){
-    elementCalendar =`<div class="calendarContainer"> 
-                        <div class="yearTitle">
-                            <button id="subtract"><i class="fas fa-arrow-left"></i></button>
-                            <h1>${year}</h1>
-                            <button id="add"><i class="fas fa-arrow-right"></i></button>
-                        </div>`; 
+function createYear(){
+    const nodoYear = document.createElement( 'div' ); 
+    nodoYear.classList.add( 'yearTitle' ); 
+
+    const nodoBtnSubtract = document.createElement( 'button'); 
+    nodoBtnSubtract.innerHTML = `<i class="fas fa-chevron-left"></i>`; 
+    nodoBtnSubtract.addEventListener( 'click', () =>{
+        prevYear();  
+    })
+    
+    const nodoBtnAdd = document.createElement( 'button'); 
+    nodoBtnAdd.innerHTML= `<i class="fas fa-chevron-right"></i>`; 
+    nodoBtnAdd.addEventListener( 'click', () =>{
+        nextYear(); 
+    })
+
+    const nodoYearTitle = document.createElement( 'h1' ); 
+    nodoYearTitle.innerHTML = `${year}`; 
+
+    nodoYear.appendChild( nodoBtnSubtract ); 
+    nodoYear.appendChild( nodoYearTitle ); 
+    nodoYear.appendChild( nodoBtnAdd ); 
+
+    nodoCalendar.appendChild( nodoYear ); 
 }
-//elementos meses
-let elementMonth = function(){
-    for( let i = 0; i < monthList.length; i++ ){
-        elementCalendar +=`<div class="month">
-                                <div class="monthTitle">${monthList[i]}</div>`; 
-        elementWeek(); 
-        elementDays( monthList[i], i ); 
+
+function createMonth(){
+    for( let i = 0; i < monthList.length; i++){
+        const nodoMonth = document.createElement( 'div' ); 
+        nodoMonth.classList.add( 'month' ); 
+
+        const nodoMonthTitle = document.createElement( 'h2' ); 
+        nodoMonthTitle.classList.add( 'monthTitle' ); 
+        nodoMonthTitle.innerHTML = `${monthList[i]}`; 
+        
+        nodoMonth.appendChild( nodoMonthTitle ); 
+        nodoCalendar.appendChild( nodoMonth ); 
+        createWeek( nodoMonth ); 
+        createDays( nodoMonth, monthList[i], i ); 
+    } 
+}
+
+function createWeek( month ){
+    for ( let i = 0; i < week.length;  i++ ){
+        const nodoWeekDay = document.createElement( 'div' ); 
+        nodoWeekDay.classList.add( 'weekDay' ); 
+        nodoWeekDay.innerHTML = `${ week[i] }`; 
+        month.appendChild( nodoWeekDay ); 
     }
 }
-//elementos días de la semana 
-let elementWeek = function(){
-    for ( let i = 0; i < week.length; i++){
-        elementCalendar += `<div class="weekDay">${ week[i] }</div>`; 
-    }
-}
-//año bisiesto
-let getLeapYear = function(){
+
+function getLeapYear(){
     return year % 4 === 0; 
 }
-//días por mes
-let getDays = function( month ){
+
+function getDays( month ){
     let howManyDays; 
     if ( month31Days.includes( month )){
         howManyDays = 31; 
@@ -53,63 +78,88 @@ let getDays = function( month ){
     }
     return howManyDays; 
 }
-//elementos días
-let elementDays = function( month, monthIndex ){
+
+function createDays ( element, month, monthIndex ){
     let actualMonth = month; 
     let actualMonthIndex = monthIndex; 
-    let howManyDays = getDays(actualMonth); 
-    for( let i = 1; i <= howManyDays; i++ ){
-        let firstDay = getfirstDay( i, actualMonth ); 
-        let actualDay = getActualDay( i, actualMonthIndex ); 
-        elementCalendar += `<div ${ firstDay } class="monthDay ${ actualDay }">${i}</div>`; 
-    }
-    elementCalendar += `</div>`; 
-}
-//clase día actual
-let getActualDay = function( day, month){
-    let actualDayClass = ''; 
-    console.log( today, day, actualMonth, month)
-    if ( today === day && actualMonth  === month ){
-        return actualDayClass = 'actualDay'; 
-    } else{
-        return actualDayClass; 
-    }    
-}
-//id primer día de cada mes
-let getfirstDay = function( index, month ){
-    let firstDay = ''; 
-    if (index === 1){
-        firstDay = `id="firstDay${ month }"`; 
-        return firstDay; 
-    } else{
-        return firstDay; 
+    let howManyDays = getDays( actualMonth ); 
+    for ( let i = 1; i <= howManyDays; i++  ){
+        const nodoDay = document.createElement( 'div' ); 
+        nodoDay.classList.add( 'monthDay' ); 
+        nodoDay.innerHTML = `${i}`
+        element.appendChild( nodoDay ); 
+        if ( getActualDay( i, actualMonthIndex)){
+            nodoDay.classList.add( 'actualDay' ); 
+        }
+        if ( getfirstDay( i )) {
+            nodoDay.id = `firstDay${actualMonth}`; 
+        }
     }
 }
-//unir elementCalendar
-let mergeCalendarElements = function(){
-    elementYear(); 
-    elementMonth(); 
+
+function getActualDay( day, month ){
+    return today === day && actualMonth === month; 
 }
-//recoger el primer día de enero
-let get1January = function(){
+
+function getfirstDay( day ){
+    return day === 1; 
+}
+
+function get1January(){
     let jan=  new Date(`Jan 1, ${year} 00:00:00`);
     return jan.getDay(); 
 }
-//pintar el calendario
-let paintCalendar= function(){
-    nodoCalendar.innerHTML = elementCalendar; 
+
+function organizeMonth(){
+    let counterInitial = get1January(); 
+    for ( let i = 0; i < monthList.length -1; i++ ){
+        let actualMonth = monthList[i]; 
+        let nextMonth = monthList[i +1]; 
+        let days = getDays( actualMonth ); 
+        let finalPosition = days % 7; 
+        let finalDayPosition = counterInitial + finalPosition;
+        if ( finalDayPosition > 7 ){
+            finalDayPosition = finalDayPosition % 7; 
+        }
+        if ( actualMonth === 'Enero' ){
+            switch (counterInitial) {
+                case 0:
+                counterInitial = 7; 
+                break;
+            }
+            let nodoFirstDay = document.querySelector(`#firstDay${actualMonth}`);
+            nodoFirstDay.style.gridColumnStart = counterInitial;
+        }
+        counterInitial = finalDayPosition; 
+        let columnStart = finalDayPosition; 
+        let nodoFirstDay = document.querySelector(`#firstDay${nextMonth}`);
+        nodoFirstDay.style.gridColumnStart = columnStart;
+    }
 }
-mergeCalendarElements(); 
-paintCalendar(); 
-//añadir año
-let addYear = function(){
+
+function createCalendar(){
+    createYear(); 
+    createMonth();
+    organizeMonth(); 
+}
+
+createCalendar(); 
+
+function addYear(){
     return year += 1; 
 }
-//restar año
-let subtractYear = function(){
+
+function subtractYear(){
     return year -= 1; 
 }
 
-let nodoBtnAdd = document.querySelector('#add'); 
-let nodoBtnSubtract = document.querySelector('#subtract'); 
-
+function nextYear(){
+    year = addYear(); 
+    nodoCalendar.innerHTML = ''; 
+    createCalendar(); 
+}
+function prevYear(){
+    year = subtractYear(); 
+    nodoCalendar.innerHTML = ''; 
+    createCalendar(); 
+}

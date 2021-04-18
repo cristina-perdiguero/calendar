@@ -9,7 +9,6 @@
 }
 body{
     margin: 0;
-    /*background: linear-gradient(180deg, var(--back-color-dark),  var(--back-color), var( --back-color-dark)  );*/
     background-color: var(--back-color);
     color: white;
     text-align: center;
@@ -24,11 +23,12 @@ body{
 button{
     background-color: transparent;
     border: none;
+    margin: 10px;
 }
 button i {
     color: white;
 }
-.calendarContainer{
+#calendar{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -57,4 +57,9 @@ button i {
 }
 .weekDay{
     color: var(--principal-color);
+    grid-row-start: 2;
+}
+.actualDay{
+    border-radius: 5px;
+    background-color: var(--principal-color);
 }
