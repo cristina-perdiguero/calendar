@@ -9,6 +9,8 @@ const monthList       = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
 const month31Days     = ["Enero", "Marzo", "Mayo", "Julio", "Agosto", "Octubre", "Diciembre" ]; 
 const month30Days     = ["Abril", "Junio", "Septiembre", "Noviembre"]; 
 const week            = ["Lun", "Mar", "Mier", "Jue" , "Vie", "Sab", "Dom"]; 
+let nodoPopUp; 
+let nodoList;
 
 function createYear(){
     const nodoYear = document.createElement( 'div' ); 
@@ -86,7 +88,10 @@ function createDays ( element, month, monthIndex ){
     for ( let i = 1; i <= howManyDays; i++  ){
         const nodoDay = document.createElement( 'div' ); 
         nodoDay.classList.add( 'monthDay' ); 
-        nodoDay.innerHTML = `${i}`
+        nodoDay.innerHTML = `${i}`; 
+        nodoDay.addEventListener( 'click', () =>{
+            openToDoList(); 
+        })
         element.appendChild( nodoDay ); 
         if ( getActualDay( i, actualMonthIndex)){
             nodoDay.classList.add( 'actualDay' ); 
@@ -141,6 +146,7 @@ function createCalendar(){
     createYear(); 
     createMonth();
     organizeMonth(); 
+    createPopUp(); 
 }
 
 createCalendar(); 
@@ -162,4 +168,36 @@ function prevYear(){
     year = subtractYear(); 
     nodoCalendar.innerHTML = ''; 
     createCalendar(); 
+}
+
+function createPopUp(){
+    nodoPopUp = document.createElement( 'div' ); 
+    nodoPopUp.classList.add( 'popUp' ); 
+     
+    nodoList = document.createElement( 'div' ); 
+    nodoList.classList.add( 'todoList' ); 
+    nodoList.addEventListener( 'click', (event)=>{
+        event.stopPropagation(); 
+    })
+    
+    nodoPopUp.appendChild( nodoList ); 
+    nodoPopUp.addEventListener( 'click', ()=>{
+        closeToDoList(); 
+    })
+    nodoCalendar.appendChild( nodoPopUp ); 
+    
+}
+
+function openToDoList(){
+    nodoPopUp.classList.add( 'visible' ); 
+    nodoList.classList.add( 'open' );  
+}
+
+function closeToDoList(){
+    nodoList.classList.add( 'close' ); 
+    let ref_TimeOut =  setTimeout(() => {
+        nodoPopUp.classList.remove( 'visible' ); 
+        nodoList.classList.remove( 'open' ); 
+        nodoList.classList.remove( 'close' ); 
+    }, 500);
 }
