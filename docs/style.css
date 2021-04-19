@@ -59,7 +59,6 @@ button i {
 }
 .weekDay{
     color: var(--principal-color);
-    grid-row-start: 2;
 }
 .actualDay{
     border-radius: 5px;
