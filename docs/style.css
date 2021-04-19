@@ -77,9 +77,25 @@ button i {
 }
 .todoList{
     margin: 50px;
+    padding: 20px;
     height: calc(100% - 100px);
     background-color: #ce4f57;
     border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input{
+    border: transparent;
+    border-bottom: 1px solid #222;
+    background-color: transparent;
+    color: white;
+}
+.item{
+    display: flex;
+}
+.check:checked~div{
+    text-decoration: line-through; 
 }
 .visible{
     display: block;

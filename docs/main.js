@@ -11,6 +11,7 @@ const month30Days     = ["Abril", "Junio", "Septiembre", "Noviembre"];
 const week            = ["Lun", "Mar", "Mier", "Jue" , "Vie", "Sab", "Dom"]; 
 let nodoPopUp; 
 let nodoList;
+let nodoAddList; 
 
 function createYear(){
     const nodoYear = document.createElement( 'div' ); 
@@ -164,6 +165,7 @@ function nextYear(){
     nodoCalendar.innerHTML = ''; 
     createCalendar(); 
 }
+
 function prevYear(){
     year = subtractYear(); 
     nodoCalendar.innerHTML = ''; 
@@ -173,19 +175,40 @@ function prevYear(){
 function createPopUp(){
     nodoPopUp = document.createElement( 'div' ); 
     nodoPopUp.classList.add( 'popUp' ); 
-     
+    createTodoList(); 
+    createAddList(); 
+    nodoPopUp.addEventListener( 'click', ()=>{
+        closeToDoList(); 
+    })
+    nodoPopUp.appendChild( nodoList ); 
+    nodoList.appendChild( nodoAddList); 
+    nodoCalendar.appendChild( nodoPopUp ); 
+}
+
+function createTodoList(){
     nodoList = document.createElement( 'div' ); 
     nodoList.classList.add( 'todoList' ); 
     nodoList.addEventListener( 'click', (event)=>{
         event.stopPropagation(); 
     })
-    
-    nodoPopUp.appendChild( nodoList ); 
-    nodoPopUp.addEventListener( 'click', ()=>{
-        closeToDoList(); 
+}
+
+function createAddList(){
+    nodoAddList = document.createElement( 'div' ); 
+
+    const itemImput = document.createElement( 'input' ); 
+    itemImput.value = `Añadir recordatorio`; 
+
+    const addItem = document.createElement('button'); 
+    addItem.innerHTML = `<i class="fas fa-plus"></i>`; 
+
+    addItem.addEventListener( 'click', ()=>{
+        let element = add( itemImput ); 
+        nodoAddList.insertBefore( element, itemImput ); 
     })
-    nodoCalendar.appendChild( nodoPopUp ); 
-    
+
+    nodoAddList.appendChild( itemImput ); 
+    nodoAddList.appendChild( addItem ); 
 }
 
 function openToDoList(){
@@ -200,4 +223,18 @@ function closeToDoList(){
         nodoList.classList.remove( 'open' ); 
         nodoList.classList.remove( 'close' ); 
     }, 500);
+}
+
+function add(elemento){ 
+    let msj = elemento.value; 
+    const item  = document.createElement( 'div' ); 
+    item.classList.add('item'); 
+    const itemText = document.createElement( 'div' ); 
+    itemText.innerHTML= msj; 
+    const check = document.createElement( 'input' ); 
+    check.classList.add( 'check' ); 
+    check.type = 'checkbox'; 
+    item.appendChild( check ); 
+    item.appendChild( itemText ); 
+    return item; 
 }
